@@ -17,3 +17,6 @@ A simple console app to track the price of a few items that I'm eyeing for Chris
 1. Add new items to a .csv file
 1. Modify existing items with current price with logic checks to see if the item has become more or less expensive
 1. Have automation for the project to run every 12 hours.
+   1. Check the price to see if it has changed
+   1. If the price has changed, log the new price in the .csv file
+   1. If the price changes, send an e-mail noting the change
