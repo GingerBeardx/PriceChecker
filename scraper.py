@@ -1,7 +1,8 @@
 # Python 3.7
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from get_prices import *
+from get_prices import get_amazon_price
+from send_email import send_email
+
 
 # Declare page links
 page_amazon = r"https://www.amazon.com/Samsung-32-inch-Curved-Monitor-LC32F391FWNXZA/dp/B01D3BDXQA/ref=sr_1_3?keywords=monitor&qid=1573787251&refinements=p_89%3ASamsung&rnid=2528832011&sr=8-3"
@@ -10,6 +11,6 @@ page_newegg = r"https://www.newegg.com/p/0JC-0007-00K85?Description=Samsung%2032
 # Open the browser
 driver = webdriver.Chrome()
 
-get_amazon_price(driver, page_amazon)
+send_email(get_amazon_price(driver, page_amazon))
 
 driver.close()

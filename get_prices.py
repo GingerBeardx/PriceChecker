@@ -5,7 +5,7 @@ def get_amazon_price(driver, page):
     price_amazon = float(
         driver.find_element_by_id("priceblock_ourprice").text.strip("$")
     )
-    print(f"The current Amazon price for {name_amazon} is ${price_amazon}.")
+    return f"The current Amazon price for {name_amazon} is ${price_amazon}."
 
 
 def get_newegg_price(driver, page):
