@@ -2,7 +2,7 @@ from secure import *
 import smtplib
 
 
-def send_email(msg):
+def send_email(content):
     # Login to Gmail  and authenticate
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.ehlo()
@@ -13,10 +13,13 @@ def send_email(msg):
 
     # Generate and send the e-mail
     subject = "This is s a test"
-    body = "Check the Amazon Link"
+    body = content
+
+    msg = f"Subject: {subject}\n\n{body}"
 
     server.sendmail(username, username, msg)
     print("Email has been sent")
 
+    # Close Gmail connection
     server.quit()
 

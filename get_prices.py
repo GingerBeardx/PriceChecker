@@ -17,4 +17,4 @@ def get_newegg_price(driver, page):
         price_box_newegg.find_element_by_class_name("price-current").text.strip("$")
     )
     name_newegg = driver.find_element_by_id("grpDescrip_h").text
-    print(f"The current NewEgg price for {name_newegg} is ${price_newegg}.")
+    return f"The current NewEgg price for {name_newegg} is ${price_newegg}."
