@@ -1,4 +1,4 @@
-from secure import *
+from secure import username, password
 import smtplib
 
 
