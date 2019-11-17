@@ -1,37 +1,78 @@
 # Python 3.7
+
+# Python module imports
+import csv
+import time
+
+# Installed package imports
 from selenium import webdriver
-from get_prices import get_amazon_price
+
+# Custom code imports
+from get_prices import get_amazon_price, get_newegg_price
 from send_email import send_email
-import os, csv
-
-
-# Declare page links
-page_amazon = r"https://www.amazon.com/Samsung-32-inch-Curved-Monitor-LC32F391FWNXZA/dp/B01D3BDXQA/ref=sr_1_3?keywords=monitor&qid=1573787251&refinements=p_89%3ASamsung&rnid=2528832011&sr=8-3"
-page_newegg = r"https://www.newegg.com/p/0JC-0007-00K85?Description=Samsung%2032-inch%20Curved%20LED%20Monitor%20%28Ultra-%20Slim%20Design%29%20%28LC32F391FWNXZA%29&cm_re=Samsung_32-inch_Curved_LED_Monitor_%28Ultra-_Slim_Design%29_%28LC32F391FWNXZA%29-_-9SIAA7W91S8486-_-Product"
-
-# Open the browser
-# driver = webdriver.Chrome()
-
-# print(get_amazon_price(driver, page_amazon))
-
-# driver.close()
+from file_cont import file_exist_check
 
 
 # Check to see if the products.csv file exists. If it does not, initiate it.
-if os.path.isfile("./products.csv") == False:
-    with open("products.csv", "w", newline="") as prod_file:
-        headers = [
-            "Date Added",
-            "Product Name",
-            "Aamzon URL",
-            "NewEgg URL",
-            "Date Last Checked",
-            "High Price",
-            "High Site",
-            "Low Price",
-            "Low Site",
-            "Amazon Current Price",
-            "NewEgg Current Price",
-        ]
-        file_writer = csv.writer(prod_file)
-        file_writer.writerow(headers)
+file_exist_check()
+
+# Initialize program and greet the user
+# Create menu options and display for the user
+print("Welcome to Price Checker")
+print("-" * 80)
+print("1) Add a new item")
+print("2) View watched items")
+print("3) Run Auto Watcher")
+print("4) Email current info")
+print("5) Close the program")
+print("-" * 80)
+option_choice = input("Please select one of the options above > ")
+
+
+if int(option_choice) == 1:
+    # Get the URLs for the item to be watched (This should be the actual product page)
+    print("Please make sure you have the Amazon and NewEgg URLs to add:")
+    amazon_url = input("What is the Amazon URL? > ")
+    newegg_url = input("What is the NewEgg URL? > ")
+    # Add regex validation of the sites
+
+    # Get Amazon and NewEgg info
+    driver = webdriver.Chrome()
+    amazon_name, amazon_price = get_amazon_price(driver, amazon_url)
+    newegg_name, newegg_price = get_newegg_price(driver, newegg_url)
+    driver.close()
+
+    # Check to see which site has the current low price, the other will have the high price so set those variables accordingly
+    if amazon_price > newegg_price:
+        high_price = amazon_price
+        high_site = "Amazon"
+        low_site = "NewEgg"
+        low_price = newegg_price
+    else:
+        high_price = newegg_price
+        high_site = "NewEgg"
+        low_site = "Amazon"
+        low_price = amazon_price
+
+    # Add new item to products.csv
+    with open("products.csv", "a", newline="") as products:
+        writer = csv.writer(products)
+        # Get current date
+        cur_date = time.strftime("%Y/%m/%d")
+
+        writer.writerow(
+            [
+                cur_date,
+                amazon_name,
+                amazon_url,
+                newegg_url,
+                cur_date,
+                high_price,
+                high_site,
+                low_price,
+                low_site,
+                amazon_price,
+                newegg_price,
+            ]
+        )
+    print("File Updated with new product")

@@ -3,3 +3,4 @@ chromedriver.exe
 __pycache__
 secure.py
 products.csv
+product_urls.txt
